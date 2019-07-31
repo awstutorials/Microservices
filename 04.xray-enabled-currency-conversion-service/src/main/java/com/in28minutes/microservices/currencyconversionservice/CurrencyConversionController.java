@@ -13,13 +13,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
+
 @RestController
+@XRayEnabled
 public class CurrencyConversionController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	//@Autowired
 	//private CurrencyExchangeServiceProxy proxy;
+	
+	@Autowired
+	private ApiHandler apiHandler;
 
 	@GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
 	public CurrencyConversionBean convertCurrency(@PathVariable String from, @PathVariable String to,
@@ -35,6 +41,18 @@ public class CurrencyConversionController {
 				uriVariables);
 
 		CurrencyConversionBean response = responseEntity.getBody();
+
+		return new CurrencyConversionBean(response.getId(), from, to, response.getConversionMultiple(), quantity,
+				quantity.multiply(response.getConversionMultiple()), response.getPort());
+	}
+	
+	@GetMapping("/xray/from/{from}/to/{to}/quantity/{quantity}")
+	public CurrencyConversionBean convertCurrencyXRay(@PathVariable String from, @PathVariable String to,
+			@PathVariable BigDecimal quantity) {
+
+		
+
+		CurrencyConversionBean response = apiHandler.getConversionBean(from, to);
 
 		return new CurrencyConversionBean(response.getId(), from, to, response.getConversionMultiple(), quantity,
 				quantity.multiply(response.getConversionMultiple()), response.getPort());

@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
+
 @RestController
+@XRayEnabled
 public class CurrencyExchangeController {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -17,14 +20,14 @@ public class CurrencyExchangeController {
 	private Environment environment;
 	
 	@Autowired
-	private ExchangeValueRepository repository;
+	private CurrencyExchangeServiceImpl serviceImpl;
 	
 	@GetMapping("/currency-exchange/from/{from}/to/{to}")
 	public ExchangeValue retrieveExchangeValue
 		(@PathVariable String from, @PathVariable String to){
 		
 		ExchangeValue exchangeValue = 
-				repository.findByFromAndTo(from, to);
+				serviceImpl.findByFromAndTo(from, to);
 		
 		exchangeValue.setPort(
 				Integer.parseInt(environment.getProperty("local.server.port")));
