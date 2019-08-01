@@ -1,5 +1,13 @@
 # Microservices
 
+VPC Creation : https://youtu.be/i0Io1jrDT4M
+LB, ECS, LimitService : https://youtu.be/NaNNkrP_90M
+LimitService external Configurations : https://youtu.be/V57FGQyiRLU
+Currency exchange service added to ECS: https://youtu.be/OgJerVHuFZg
+Currency conversion service added to ECS: https://youtu.be/7MTIB2LML_U
+Currency exchange service XRay capability added to ECS: https://youtu.be/QWFs-xiEwQE
+
+
 $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
 
 docker build --tag 182388080935.dkr.ecr.eu-west-1.amazonaws.com/limitdemoecr:3 --build-arg JAR_FILE=./target/limits-service-new-0.0.1-SNAPSHOT.jar .
